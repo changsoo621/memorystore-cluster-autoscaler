@@ -390,6 +390,9 @@ class StateFirestore extends State {
    * @return {firestore.Firestore}
    */
   static createFirestoreClient(stateProjectId, stateDatabase) {
+    if (!stateDatabase.databaseId) {
+      return new firestore.Firestore({projectId: stateProjectId, databaseId: "(default)"});
+    }
     return new firestore.Firestore({projectId: stateProjectId, databaseId: stateDatabase.databaseId});
   }
 
@@ -400,6 +403,9 @@ class StateFirestore extends State {
    * @return {string}
    */
    static getStateDatabasePath(stateProjectId, stateDatabase) {
+    if (!stateDatabase.databaseId) {
+      return `projects/${stateProjectId}/databases/(default)`;
+    }
     return `projects/${stateProjectId}/databases/${stateDatabase.databaseId}`;
   }
 
