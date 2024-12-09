@@ -398,10 +398,25 @@ class StateFirestore extends State {
   }
 
   /**
+   * Get the ID of the database from the stateDatabase configuration
+   * @param {StateDatabaseConfig} stateDatabase
+   * @return {string}
+   */
+   static getDatabaseId(stateDatabase) {
+    let databaseId = stateDatabase.databaseId;
+    if (!databaseId) {
+      databaseId = "(default)";
+    }
+    return databaseId;
+  }
+
+  /**
    * Memoize createFirestoreClient() so that we only create one Firestore
    * client for each stateProject
    */
-  static getFirestoreClient = memoize(StateFirestore.createFirestoreClient);
+  static getFirestoreClient = memoize(
+    StateFirestore.createFirestoreClient, StateFirestore.getDatabaseId
+  );
 
   /**
    * @param {AutoscalerMemorystoreCluster} cluster
