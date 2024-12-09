@@ -390,24 +390,17 @@ class StateFirestore extends State {
    * @return {firestore.Firestore}
    */
   static createFirestoreClient(stateProjectId, stateDatabase) {
-    let databaseId = stateDatabase.databaseId;
-    if (!databaseId) {
-      databaseId = "(default)";
-    }
-    return new firestore.Firestore({projectId: stateProjectId, databaseId: databaseId});
+    return new firestore.Firestore({projectId: stateProjectId, databaseId: stateDatabase.databaseId});
   }
 
   /**
-   * Get the ID of the database from the stateDatabase configuration
+   * Builds a Firestore database path - used as the key for memoize
+   * @param {string} stateProjectId
    * @param {StateDatabaseConfig} stateDatabase
    * @return {string}
    */
-   static getDatabaseId(stateDatabase) {
-    let databaseId = stateDatabase.databaseId;
-    if (!databaseId) {
-      databaseId = "(default)";
-    }
-    return databaseId;
+   static getStateDatabasePath(stateProjectId, stateDatabase) {
+    return `projects/${stateProjectId}/databases/${stateDatabase.databaseId}`;
   }
 
   /**
@@ -423,8 +416,9 @@ class StateFirestore extends State {
    */
   constructor(cluster) {
     super(cluster);
-    this.stateDabase = cluster.stateDatabase;
-    this.firestore = StateFirestore.getFirestoreClient(this.stateProjectId, this.stateDabase);
+    this.stateDatabase = cluster.stateDatabase;
+    /** @type {firestore.Firestore} */
+    this.firestore = StateFirestore.getFirestoreClient(this.stateProjectId, this.stateDatabase);
   }
 
   /**
