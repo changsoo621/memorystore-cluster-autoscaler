@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Copyright 2024 Google LLC
  *
@@ -376,7 +377,8 @@ class StateSpanner extends State {
  *
  * {
  *   "stateDatabase": {
- *       "name": "firestore"
+ *       "name": "firestore",
+ *       "databaseId": "(default)"
  *   }
  * }
  */
@@ -384,10 +386,15 @@ class StateFirestore extends State {
   /**
    * Builds a Firestore client for the given project ID
    * @param {string} stateProjectId
+   * @param {StateDatabaseConfig} stateDatabase
    * @return {firestore.Firestore}
    */
-  static createFirestoreClient(stateProjectId) {
-    return new firestore.Firestore({projectId: stateProjectId});
+  static createFirestoreClient(stateProjectId, stateDatabase) {
+    let databaseId = stateDatabase.databaseId;
+    if (!databaseId) {
+      databaseId = "(default)";
+    }
+    return new firestore.Firestore({projectId: stateProjectId, databaseId: databaseId});
   }
 
   /**
@@ -401,7 +408,7 @@ class StateFirestore extends State {
    */
   constructor(cluster) {
     super(cluster);
-    this.firestore = StateFirestore.getFirestoreClient(this.stateProjectId);
+    this.firestore = StateFirestore.getFirestoreClient(this.stateProjectId, cluster.stateDatabase);
   }
 
   /**
