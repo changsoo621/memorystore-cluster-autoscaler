@@ -414,7 +414,7 @@ class StateFirestore extends State {
    * client for each stateProject
    */
   static getFirestoreClient = memoize(
-    StateFirestore.createFirestoreClient, StateFirestore.getDatabasePath
+    StateFirestore.createFirestoreClient, StateFirestore.getStateDatabasePath
   );
 
   /**
