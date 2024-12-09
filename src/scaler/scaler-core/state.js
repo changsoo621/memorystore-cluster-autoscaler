@@ -408,7 +408,8 @@ class StateFirestore extends State {
    */
   constructor(cluster) {
     super(cluster);
-    this.firestore = StateFirestore.getFirestoreClient(this.stateProjectId, cluster.stateDatabase);
+    this.stateDabase = cluster.stateDatabase
+    this.firestore = StateFirestore.getFirestoreClient(this.stateProjectId, this.stateDabase);
   }
 
   /**
