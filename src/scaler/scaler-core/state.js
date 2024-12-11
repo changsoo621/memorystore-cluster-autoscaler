@@ -423,6 +423,7 @@ class StateFirestore extends State {
     super(cluster);
     this.stateDatabase = cluster.stateDatabase;
     /** @type {firestore.Firestore} */
+    // @ts-ignore
     this.firestore = StateFirestore.getFirestoreClient(this.stateProjectId, this.stateDatabase);
   }
 
